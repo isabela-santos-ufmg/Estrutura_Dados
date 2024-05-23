@@ -12,12 +12,13 @@ void bubbleSort(int vector[], int size)
     // passa pelo vetor (subtrai um porque nao precisa ver o ultimo)
     for(int i = 0; i < size - 1; i++)
     {
-        // passa por todos menos o ultimo e subtrai o que já passou
-        for(int j = 0; j < size - i - 1; j++)
+        // passa por todos o anterior e subtrai o que já verificou no for anterior
+        for(int j = 1; j < size - i; j++)
         {
-            if(vector[j] > vector[j + 1])
+            // se o elemento for menor que o anterior, trocamos
+            if(vector[j] < vector[j - 1])
             {
-                swap(&vector[j], &vector[j + 1]);
+                swap(&vector[j], &vector[j - 1]);
             }
         }
     }
@@ -25,7 +26,7 @@ void bubbleSort(int vector[], int size)
 
 int main()
 {
-    int v [] = {5, 2, 1, 0, 4, 3, 6};
+    int v [] = {5, 2, 1, 0, 4, 3, 5, 6};
     
     std::cout << "Original: " << std::endl;
     for(int i = 0; i < std::size(v); i++)
