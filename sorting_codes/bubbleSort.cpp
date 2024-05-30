@@ -1,11 +1,19 @@
 #include <iostream> 
 
+void printVector(int vector[], int size)
+{
+    for(int i = 0; i < size; i++)
+    {
+        std::cout << vector[i] << std::endl;
+    }
+}
+
 void swap(int *a, int *b)
 {
     int temp = *a;
     *a = *b; 
     *b = temp;
-}
+};
 
 void bubbleSort(int vector[], int size)
 {
@@ -22,24 +30,16 @@ void bubbleSort(int vector[], int size)
             }
         }
     }
-}
+};
 
 int main()
 {
     int v [] = {5, 2, 1, 0, 4, 3, 5, 6};
     
     std::cout << "Original: " << std::endl;
-    for(int i = 0; i < std::size(v); i++)
-    {
-        std::cout << v[i] << std::endl;
-
-    }
+    printVector(v, std::size(v));
     bubbleSort(v, std::size(v));
     std::cout << "Ordenado: " << std::endl;
-    for(int i = 0; i < std::size(v); i++)
-    {
-        std::cout << v[i] << std::endl;
-
-    }
+    printVector(v, std::size(v));
     return 0;
 }
