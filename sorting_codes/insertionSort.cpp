@@ -8,13 +8,6 @@ void printVector(int vector[], int size)
     }
 };
 
-void swap(int *a, int *b)
-{
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-};
-
 void insertionSort(int vector[], int size)
 {
     for(int i = 1; i < size; i++)
