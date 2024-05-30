@@ -23,7 +23,7 @@
 
 typedef struct alg{
   int num;
-  char * name;
+  const char * name;
 } alg_t;
 
 alg_t algvet[]={
@@ -49,11 +49,19 @@ int name2num(char * name){
 
 char * num2name(int num){
   int i=0;
-  while (algvet[i].num){
-    if (algvet[i].num==num) return algvet[i].name;
+  while (algvet[i].num)
+  {
+    if (algvet[i].num==num) 
+    {
+      char * name_copy = strdup(algvet[i].name);
+      if (name_copy == NULL)
+      {
+      }
+      return name_copy;
+    }
     i++;
   }
-  return 0;
+  return NULL;
 }
 
 typedef struct opt{
@@ -138,9 +146,24 @@ void swap(int *xp, int *yp, sortperf_t *s){
 }
 
 // shellsort
-void shellSort(int *A, int n, sortperf_t * s) {
+void shellSort(int *A, int n, sortperf_t *s) {
+    inccalls(s, 1);
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            inccmp(s, 1);
+            incmove(s, 1);
+            int temp = *(A + i);
+            int j;
+            for (j = i; j >= gap && *(A + j - gap) > temp; j -= gap) {
+                inccmp(s, 1);
+                *(A + j) = *(A + j - gap);
+                incmove(s, 1);
+            }
+            incmove(s, 1);
+            *(A + j) = temp;
+        }
+    }
 }
-
 
 // recursive selection sort
 void recursiveSelectionSort(int arr[], int l, int r, sortperf_t * s)
@@ -198,7 +221,8 @@ void insertionSort(int v[], int l, int r, sortperf_t * s) {
   {
     int aux = v[i];
     int j = i - 1;
-    
+    incmove(s, 1);
+    inccmp(s, 1);
     while(j>= 0 && aux < v[j])
     {
       inccmp(s, 1);
@@ -207,9 +231,7 @@ void insertionSort(int v[], int l, int r, sortperf_t * s) {
       j--;
     }
     v[j + 1] = aux;
-    if (j >= 0) {
-            inccmp(s, 1);
-        }
+    incmove(s, 1);
   }
 }
 
@@ -228,13 +250,42 @@ void partition3(int * A, int l, int r, int *i, int *j, sortperf_t *s) {
 }
 
 // standard quicksort partition
-void partition(int * A, int l, int r, int *i, int *j, sortperf_t *s) {
+void partition(int *A, int l, int r, int *i, int *j, sortperf_t *s) {
+    int pivot = *(A + r);
+    *i = l - 1;
+    *j = r;
+
+    while (1) {
+        do {
+            (*i)++;
+            inccmp(s, 1);
+        } while (*(A + *i) < pivot);
+
+        do {
+            (*j)--;
+            inccmp(s, 1);
+        } while (*(A + *j) > pivot);
+
+        if (*i >= *j)
+            break;
+
+        swap((A + *i), (A + *j), s);
+    }
+    swap((A + *i), (A + r), s);
 }
 
-// standard quicksort
-void quickSort(int * A, int l, int r, sortperf_t *s) { 
-}
+void quickSort(int *A, int l, int r, sortperf_t *s) {
+    if (l < r) {
+        int i, j;
+        partition(A, l, r, &i, &j, s);
 
+        inccalls(s, 1);
+        quickSort(A, l, i - 1, s);
+        inccalls(s, 1);
+        quickSort(A, j + 1, r, s);
+
+    }
+}
 // quicksort with median of 3
 void quickSort3(int * A, int l, int r, sortperf_t *s) { 
 }
